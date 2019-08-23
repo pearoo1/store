@@ -1,0 +1,5 @@
+<root>
+    <item name='com.mysql.cj.jdbc.Driver'>
+        <annotation name='java.lang.Deprecated'/>
+    </item>
+</root>
