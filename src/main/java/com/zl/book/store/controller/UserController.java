@@ -6,10 +6,11 @@ import com.zl.book.store.typehandler.SexEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
-
+import java.util.UUID;
 
 
 @Controller
@@ -19,6 +20,7 @@ public class UserController {
     private User user;
     // 注册，插入数据
     //10.156.55.156:8080/user/register?phone=13647187955&pwd=123456(OK)
+
     @PostMapping(value = "/register",params ={"phone","pwd"})
     @ResponseBody
     public Map<String,Object> registerUser( String phone, String pwd, HttpServletResponse response){
@@ -28,24 +30,46 @@ public class UserController {
         return  userService.registerUser(user,response.getStatus());
     }
 
-
     @PostMapping("/login")
     @ResponseBody
-    public Map<String,Object> loginUser(@RequestBody User user){
-        return null;
+    public Map<String,Object> loginUser(@RequestBody User user,HttpServletResponse response){
+        return  userService.loginUser(user,response.getStatus());
     }
 
+    @PostMapping("/home.html")
+    public ModelAndView home(ModelAndView model, HttpServletRequest request){
+        User user=new User();
+        user.setUserName("tom");
+        user.setUserPhone("12345678901");
+        model.addObject("user",user);
+        request.getSession().setAttribute("user",user);
+        model.setViewName("/home.html");
+        return model;
+    }
 
-    //10.156.55.156:8080/user/login?phone=13647187955 & pwd=123456(OK)
+    @GetMapping("/modified.html")
+    public ModelAndView modified(ModelAndView model, HttpServletRequest request){
+        User user=new User();
+        user.setUserName("tom");
+        user.setUserPhone("12345678901");
+        request.getSession().setAttribute("user",user);
+        model.addObject("user",user);
+        model.setViewName("/modified.html");
+        System.out.println( UUID.randomUUID().toString());
+        return model;
+    }
+
+  /*  //10.156.55.156:8080/user/login?phone=13647187955 & pwd=123456(OK)
     @PostMapping(value="/login",params = {"phone","pwd"})
     @ResponseBody
     public Map<String,Object> loginUser(String phone, String pwd,HttpServletResponse response){
+        response.addHeader("header","Access-Control-Allow-Origin: *");
         user=new User();
         user.setUserPhone(phone);
         user.setUserPwd(pwd);
         return  userService.loginUser(user,response.getStatus());
     }
-
+*/
     //按用户id修改用户的姓名，性别，身份证号
     @PostMapping(value = "/change",params = {"uid","name","sex","card"})
     @ResponseBody

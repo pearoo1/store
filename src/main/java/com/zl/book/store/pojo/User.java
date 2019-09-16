@@ -6,7 +6,7 @@ import org.apache.ibatis.type.Alias;
 import java.io.Serializable;
 
 @JsonIgnoreProperties(ignoreUnknown = true,value = {"mybatisLazyInitializer","handler "})
-@Alias("user")
+@Alias("user_table")
 public class User implements Serializable {
     private int userId;//用户id,唯一标识
     private String userName;//用户
@@ -15,9 +15,9 @@ public class User implements Serializable {
     private Object userSex;// 性别1=女(female),2=男(male)
     private String userCard;//用户身份证号码
 
+
     public User() {
     }
-
     public User(int userId) {
         this.userId = userId;
     }

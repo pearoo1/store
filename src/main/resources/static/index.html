@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+ <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            /*点击登录按钮，获取用户名和密码*/
+            $("#submit").click(function(){
+                var userPhone=$("#userPhone").val();/*获取用户输入的账号*/
+                var userPwd=$("#userPwd").val();/*获取用户输入的密码*/
+               /* 判断是否为空*/
+                if($.trim(userPhone)==''){
+                    alert("用户不能为空");
+                    return;
+                }
+                if($.trim(userPwd)==''){
+                    alert("密码不能为空");
+                    return;
+                }
+
+               /* 定义Json数据类型的参数*/
+                	var params={
+                        "userPhone":userPhone,
+                        "userPwd":userPwd
+                    };
+                /*定义post请求方法*/
+                $.ajax({
+                    type:'post',
+                    url:'http://localhost:8080/user/login',
+                    contentType:'application/json',//表单请求方式
+                    dataType:'json',  // 跨域json请求一定是jsonp!
+                /*    jsonp: 'callbackparam',  //跨域请求的参数名，默认是callback*/
+                    data:JSON.stringify(params),//将参数转化为json数据格式
+                    success:function (data) {
+                        console.log(data);//打印返回结构到控制台
+                        if (data.result=="密码正确"){
+                            window.location.href="/user/home.html";
+                    }else {
+                            window.location.href="/user/modified.html";
+                        }
+                }});
+            });
+        });
+    </script>
+</head>
+<body>
+<!--<form method="post" action="http://10.156.55.156:8080/book/uploads"
+    enctype="multipart/form-data">
+    <input  type="file"  name="images" multiple="multiple"/> <br />
+     <input id="submit" type="submit" />
+</form>
+ <br /> -->
+
+用户名:<input id="userPhone" type="text"  name="phone"  /><br />
+密    码:<input id="userPwd" type="password"  name="pwd"  /><br />
+<input id="submit" type="button" value="登录"/>
+</body>
+
+</html>
